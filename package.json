@@ -17,5 +17,11 @@
   "bugs": {
     "url": "https://github.com/gprocell927/jetFuel/issues"
   },
-  "homepage": "https://github.com/gprocell927/jetFuel#readme"
+  "homepage": "https://github.com/gprocell927/jetFuel#readme",
+  "dependencies": {
+    "nodemon": "^1.11.0"
+  },
+  "devDependencies": {
+    "reload": "^1.1.1"
+  }
 }
