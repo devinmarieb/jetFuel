@@ -22,6 +22,7 @@
     "nodemon": "^1.11.0"
   },
   "devDependencies": {
+    "md5": "^2.2.1",
     "reload": "^1.1.1"
   }
 }
