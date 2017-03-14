@@ -13,9 +13,9 @@ app.use(express.static('public'))
 
 app.set('port', process.env.PORT || 3000)
 
-app.locals.folders = [{ id: 1, name: 'Animals'}]
+app.locals.folders = []
 
-app.locals.folder = { id: 1, name: 'Animals'}
+// app.locals.folder = {}
 
 app.locals.urls = []
 
@@ -29,6 +29,7 @@ app.get('/', (req, res)=> {
 app.post('/api/folders', (req, res) => {
   const { name } = req.body
   const id = md5(name)
+  console.log(id);
 
   app.locals.folders.push({ id, name })
   res.json({ id, name })
@@ -42,7 +43,6 @@ app.get('/api/folders/:id', (req, res) => {
     if(!folder) {
       return res.sendStatus(404)
     }
-
   res.json(folder)
 })
 
