@@ -1,10 +1,9 @@
-const inputField = document.querySelector('.user-input')
 const submitBtn = document.querySelector('.submit-btn')
+const folderList = document.querySelector('.folders')
 
 submitBtn.addEventListener('click', (e)=> {
   e.preventDefault()
   const userInput = document.querySelector('.user-input')
-  //on button click make post request with user input value
   const server = ('http://localhost:3000/api/folders')
   fetch(server, {
     method:'POST',
@@ -14,12 +13,11 @@ submitBtn.addEventListener('click', (e)=> {
     },
     body: JSON.stringify({
       name: userInput.value,
-
-      })
     })
-    .then(res => res.json())
-    .then(res => getFolders())
-    userInput.value = ''
+  })
+  .then(res => res.json())
+  .then(res => getFolders())
+  userInput.value = ''
 })
 
 function getFolders(){
@@ -33,9 +31,14 @@ function getFolders(){
   })
   .then(res => res.json())
   .then(res => document.querySelector('.folders').innerHTML = res.map((folder) => {
-    return (`<ul>${folder.name}</ul>`)
+    return (`<ul class="folder-list">${folder.name}</ul>`)
   })
 )}
+
+folderList.addEventListener('click', (e)=> {
+  console.log(e.target);
+})
+
 
 
 window.onload = getFolders()

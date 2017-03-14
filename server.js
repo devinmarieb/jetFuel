@@ -21,7 +21,6 @@ app.locals.urls = []
 
 app.locals.url = { id: 1, longURL: 'Animals.com', shortenedURL: 'Animals', folderID: 1}
 
-
 app.get('/', (req, res)=> {
   res.send('hi')
 })
@@ -39,7 +38,7 @@ app.get('/api/folders/:id', (req, res) => {
   const { id } = req.params
   const folder = app.locals.folders.find((folder) => {
     return folder.id == id
-    })
+  })
     if(!folder) {
       return res.sendStatus(404)
     }
