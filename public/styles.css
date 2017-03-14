@@ -1,0 +1,30 @@
+.left {
+  float: left;
+}
+
+.jet-fuel {
+  color: orange;
+  font-size: 70px;
+  font-family: 'Faster One', cursive;
+}
+
+.user-input {
+  padding: 5px;
+  width: 200px;
+  outline: none;
+  border: 2px solid magenta;
+  border-radius: 20px;
+  font-size: 24px;
+}
+
+.submit-btn {
+  margin-left: 20px;
+  padding: 5px;
+  width: 100px;
+  background-color: magenta;
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  font-size: 24px;
+}
