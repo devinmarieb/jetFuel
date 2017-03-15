@@ -1,7 +1,11 @@
-/*.left {
+.left {
   float: left;
 }
-*/
+
+.right {
+  float: right;
+}
+
 .jet-fuel {
   color: orange;
   font-size: 70px;
