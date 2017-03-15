@@ -20,9 +20,11 @@ app.use(express.static('public'))
 
 app.set('port', process.env.PORT || 3000)
 
-app.locals.folders = [{id: '121', name: 'test'}]
+app.locals.folders = [{id: '1', name: 'test'}]
 
-app.locals.urls = [{ id: '1', longURL: 'http://www.google.com', shortenedURL: 'Animals', folderID: '121'}, { id: '2', longURL: 'Animals.com', shortenedURL: 'Food', folderID: '121'}]
+app.locals.urls = [{ id: '1', longURL: 'http://www.google.com', shortenedURL: 'Animals', folderID: '1'},
+{ id: '2', longURL: 'Animals.com', shortenedURL: 'Food', folderID: '1'}
+]
 
 app.post('/api/folders', (req, res)=> {
   const { name } = req.body
