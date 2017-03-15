@@ -49,12 +49,14 @@ function getURLS(){
     },
   })
   .then(res => res.json())
-  .then(res => document.querySelector('.urls').innerHTML = res.map((url) => {
-    return (`<ul class="url-list">${url.longURL}</ul>`)
-  })
-)
-
+  .then(res => shortenURL(res))
+  .then(str => document.querySelector('#urls').innerHTML = str.slice(0,4))
 }
+
+function shortenURL(url){
+  return url.reduce((acc, link) => `${acc} <li class="url-list">${link.id}</li>`, '')
+}
+
 function getFolders(){
   const server = ('http://localhost:3000/api/folders')
   fetch(server, {

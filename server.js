@@ -22,13 +22,23 @@ app.set('port', process.env.PORT || 3000)
 
 app.locals.folders = [{id: '121', name: 'test'}]
 
-app.locals.urls = [{ id: '1', longURL: 'Animals.com', shortenedURL: 'Animals', folderID: '121'}, { id: '2', longURL: 'Animals.com', shortenedURL: 'Food', folderID: '121'}]
+app.locals.urls = [{ id: '1', longURL: 'Animals.com', folderID: '121'}, { id: '2', longURL: 'Animals.com', folderID: '121'}]
 
 // app.locals.url = { id: 1, longURL: 'Animals.com', shortenedURL: 'Animals', folderID: 1}
+app.get('/api/urls', (req, res) => {
+  const urls = app.locals.urls
+  res.json(urls)
+})
+
 app.post('/api/urls', (req, res) => {
   const { longURL } = req.body
-  app.locals.urls.push({ longURL })
-  res.json({ longURL })
+  const url = {
+    id: md5(longURL),
+    longURL
+  }
+  app.locals.urls.push(url)
+  console.log(app.locals.urls);
+  res.json(url)
 })
 
 app.post('/api/folders', (req, res)=> {
