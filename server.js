@@ -31,6 +31,13 @@ app.post('/api/folders', (req, res)=> {
   res.json({ id, name })
 })
 
+app.post('/api/urls', (req, res)=> {
+  const { longURL } = req.body
+  // const id = md5(name)
+  app.locals.urls.push({ longURL })
+  res.json({ longURL })
+})
+
 app.get('/api/folders/:id', (req, res)=> {
   const { id } = req.params
   const url = app.locals.urls.filter((url)=> {
@@ -45,6 +52,11 @@ app.get('/api/folders/:id', (req, res)=> {
 app.get('/api/folders', (req, res)=> {
   const folders = app.locals.folders
    res.json(folders)
+})
+
+app.get('/api/urls', (req, res)=> {
+  const urls = app.locals.urls
+   res.json(urls)
 })
 
 app.listen(app.get('port'), ()=> {
