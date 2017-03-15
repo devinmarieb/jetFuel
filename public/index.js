@@ -31,12 +31,13 @@ function getFolders(){
   })
   .then(res => res.json())
   .then(res => document.querySelector('.folders').innerHTML = res.map((folder) => {
-    return (`<ul class="folder-list">${folder.name}</ul>`)
+    return (`<ul data-id=${folder.id} class="folder-list">${folder.name}</ul>`)
   })
 )}
 
-folderList.addEventListener('click', ()=> {
-  const server = ('http://localhost:3000/api/folders/121')
+folderList.addEventListener('click', (e)=> {
+  const id = e.target.dataset.id
+  const server = (`http://localhost:3000/api/folders/${id}`)
   fetch(server, {
     method:'GET',
     headers: {
@@ -44,8 +45,10 @@ folderList.addEventListener('click', ()=> {
       'Accept': 'application/json',
     },
   })
-  .then(res => res.json()) //res is defined
-  .then(console.log(res)) //res is not defined
+  .then(res => res.json())
+  .then(res => document.querySelector('.folder-list').innerHTML = res.map((url)=> {
+    return (`<li>${url.shortenedURL}</li>`)
+  }))
 })
 
 
