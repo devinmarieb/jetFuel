@@ -1,5 +1,7 @@
 const submitBtn = document.querySelector('.submit-btn')
 const folderList = document.querySelector('.folders')
+const submitBtnUrl = document.querySelector('.right')
+
 
 submitBtn.addEventListener('click', (e)=> {
   e.preventDefault()
@@ -20,23 +22,33 @@ submitBtn.addEventListener('click', (e)=> {
   userInput.value = ''
 })
 
-// submitBtnUrl.addEventListener('click', (e)=> {
-//   e.preventDefault()
-//   const urlInput = document.querySelector('.url-input')
-//   const server = ('http://localhost:3000/api/urls')
-//   fetch(server, {
-//     method:'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Accept': 'application/json',
-//     },
-//     body: JSON.stringify({
-//       longURL: urlInput.value,
-//     })
-//   })
-//   .then(res => res.json())
-//   urlInput.value = ''
-// })
+submitBtnUrl.addEventListener('click', (e)=> {
+  e.preventDefault()
+  const urlInput = document.querySelector('.url-input')
+  const server = ('http://localhost:3000/api/urls')
+  fetch(server, {
+    method:'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    body: JSON.stringify({
+      longURL: urlInput.value,
+    })
+  })
+  .then(res => res.json())
+  urlInput.value = ''
+})
+
+folderList.addEventListener('click', (e)=> {
+  const id = e.target.dataset.id
+  getFolderURLS(id)
+  document.querySelector('.right').innerHTML =
+  `<aside>
+    <input placeholder="Enter a URL" class="url-input" />
+    <input type="submit" value="Shorten" class="submit-btn-url"/>
+  </aside>`
+})
 
 function getFolders(){
   const server = ('http://localhost:3000/api/folders')
@@ -50,15 +62,8 @@ function getFolders(){
   .then(res => res.json())
   .then(res => document.querySelector('.folders').innerHTML = res.map((folder) => {
     return (`<ul data-id=${folder.id} class="folder-list">${folder.name}</ul>`)
-  })
-)
+  }))
 }
-
-folderList.addEventListener('click', (e)=> {
-  const id = e.target.dataset.id
-  getFolderURLS(id)
-  document.querySelector('.right').innerHTML = `<aside><input placeholder="Enter a URL" /></aside>`
-})
 
 function getFolderURLS(id){
   const server = (`http://localhost:3000/api/folders/${id}`)
@@ -71,9 +76,8 @@ function getFolderURLS(id){
   })
   .then(res => res.json())
   .then(res => document.querySelector('.url-container').innerHTML = res.map((url) => {
-    return (`<li>${url.shortenedURL}</li>`)
-  })
-)
+    return (`<li><a href=${url.longURL} class="url-link">${url.shortenedURL}</a></li>`)
+  }))
 }
 
 

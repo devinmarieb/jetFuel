@@ -41,3 +41,7 @@
   margin: 10px;
   font-size: 24px;
 }
+
+li {
+  list-style: none;
+}
