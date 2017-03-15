@@ -25,6 +25,11 @@ app.locals.folders = [{id: '121', name: 'test'}]
 app.locals.urls = [{ id: '1', longURL: 'Animals.com', shortenedURL: 'Animals', folderID: '121'}, { id: '2', longURL: 'Animals.com', shortenedURL: 'Food', folderID: '121'}]
 
 // app.locals.url = { id: 1, longURL: 'Animals.com', shortenedURL: 'Animals', folderID: 1}
+app.post('/api/urls', (req, res) => {
+  const { longURL } = req.body
+  app.locals.urls.push({ longURL })
+  res.json({ longURL })
+})
 
 app.post('/api/folders', (req, res)=> {
   const { name } = req.body

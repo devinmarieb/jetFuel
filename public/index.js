@@ -1,5 +1,25 @@
 const submitBtn = document.querySelector('.submit-btn')
 const folderList = document.querySelector('.folders')
+const submitBtnUrl= document.querySelector('.btn-url')
+
+submitBtnUrl.addEventListener('click', (e)=> {
+  e.preventDefault()
+  const urlInput = document.querySelector('.url-input')
+  const server = ('http://localhost:3000/api/urls')
+  fetch(server, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    body: JSON.stringify({
+      longURL: urlInput.value
+    })
+  })
+  .then(res => res.json())
+  .then(res => getURLS())
+  urlInput.value = ''
+})
 
 submitBtn.addEventListener('click', (e)=> {
   e.preventDefault()
@@ -19,7 +39,22 @@ submitBtn.addEventListener('click', (e)=> {
   .then(res => getFolders())
   userInput.value = ''
 })
+function getURLS(){
+  const server = ('http://localhost:3000/api/urls')
+  fetch(server, {
+    method:'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+  })
+  .then(res => res.json())
+  .then(res => document.querySelector('.urls').innerHTML = res.map((url) => {
+    return (`<ul class="url-list">${url.longURL}</ul>`)
+  })
+)
 
+}
 function getFolders(){
   const server = ('http://localhost:3000/api/folders')
   fetch(server, {
