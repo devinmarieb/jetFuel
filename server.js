@@ -35,7 +35,6 @@ app.post('/api/folders', (req, res)=> {
 
 app.post('/api/urls', (req, res)=> {
   const { longURL } = req.body
-  // const id = md5(name)
   app.locals.urls.push({ longURL })
   res.json({ longURL })
 })

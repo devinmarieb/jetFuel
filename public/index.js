@@ -57,6 +57,7 @@ function getFolders(){
 folderList.addEventListener('click', (e)=> {
   const id = e.target.dataset.id
   getFolderURLS(id)
+  document.querySelector('.right').innerHTML = `<aside><input placeholder="Enter a URL" /></aside>`
 })
 
 function getFolderURLS(id){
@@ -69,10 +70,10 @@ function getFolderURLS(id){
     },
   })
   .then(res => res.json())
-  .then(res => document.querySelector('.right').innerHTML = res.map((url)=> {
-    return(`<li>${url.shortenedURL}</li>`)
+  .then(res => document.querySelector('.url-container').innerHTML = res.map((url) => {
+    return (`<li>${url.shortenedURL}</li>`)
   })
-  )
+)
 }
 
 
