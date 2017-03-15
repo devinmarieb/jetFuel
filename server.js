@@ -13,37 +13,29 @@ app.use(express.static('public'))
 
 app.set('port', process.env.PORT || 3000)
 
-app.locals.folders = []
+app.locals.folders = [{id: '121', name: 'test'}]
 
-// app.locals.folder = {}
+app.locals.urls = [{ id: 1, longURL: 'Animals.com', shortenedURL: 'Animals', folderID: '121'}]
 
-app.locals.urls = []
-
-app.locals.url = { id: 1, longURL: 'Animals.com', shortenedURL: 'Animals', folderID: 1}
-
-
-app.get('/', (req, res)=> {
-  res.send('hi')
-})
+// app.locals.url = { id: 1, longURL: 'Animals.com', shortenedURL: 'Animals', folderID: 1}
 
 app.post('/api/folders', (req, res) => {
   const { name } = req.body
   const id = md5(name)
   console.log(id);
-
   app.locals.folders.push({ id, name })
   res.json({ id, name })
 })
 
 app.get('/api/folders/:id', (req, res) => {
   const { id } = req.params
-  const folder = app.locals.folders.find((folder) => {
-    return folder.id == id
-    })
-    if(!folder) {
+  const url = app.locals.urls.find((url) => {
+    return url.folderID == id
+  })
+    if(!url) {
       return res.sendStatus(404)
     }
-  res.json(folder)
+  res.json(url)
 })
 
 app.get('/api/folders', (req, res)=> {
