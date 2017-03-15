@@ -47,7 +47,7 @@ folderList.addEventListener('click', (e)=> {
   })
   .then(res => res.json())
   .then(res => document.querySelector('.urls').innerHTML = res.map((url)=> {
-    return (`<li>${url.shortenedURL}</li>`)
+    return (`<li><a href=${url.longURL}>${url.shortenedURL}</a></li>`)
   }))
   document.querySelector('.right').style = 'display: upset'
 })

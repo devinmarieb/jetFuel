@@ -22,14 +22,11 @@ app.set('port', process.env.PORT || 3000)
 
 app.locals.folders = [{id: '121', name: 'test'}]
 
-app.locals.urls = [{ id: '1', longURL: 'Animals.com', shortenedURL: 'Animals', folderID: '121'}, { id: '2', longURL: 'Animals.com', shortenedURL: 'Food', folderID: '121'}]
-
-// app.locals.url = { id: 1, longURL: 'Animals.com', shortenedURL: 'Animals', folderID: 1}
+app.locals.urls = [{ id: '1', longURL: 'http://www.google.com', shortenedURL: 'Animals', folderID: '121'}, { id: '2', longURL: 'Animals.com', shortenedURL: 'Food', folderID: '121'}]
 
 app.post('/api/folders', (req, res)=> {
   const { name } = req.body
   const id = md5(name)
-  console.log(id);
   app.locals.folders.push({ id, name })
   res.json({ id, name })
 })

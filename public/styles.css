@@ -1,8 +1,12 @@
 .left {
+  display: inline-block;
+  width: 50%;
   float: left;
 }
 
 .right {
+  display: inline-block;
+  width: 50%;
   float: right;
 }
 
