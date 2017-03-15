@@ -35,8 +35,17 @@ function getFolders(){
   })
 )}
 
-folderList.addEventListener('click', (e)=> {
-  console.log(e.target);
+folderList.addEventListener('click', ()=> {
+  const server = ('http://localhost:3000/api/folders/121')
+  fetch(server, {
+    method:'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+  })
+  .then(res => res.json()) //res is defined
+  .then(console.log(res)) //res is not defined
 })
 
 
