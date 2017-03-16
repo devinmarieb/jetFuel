@@ -1,9 +1,29 @@
-const submitBtn = document.querySelector('.submit-btn')
+const submitBtnFolder = document.querySelector('.submit-btn-folder')
 const folderList = document.querySelector('.folders')
-const submitBtnUrl = document.querySelector('.right')
+const bookmark = document.querySelector('.link')
 let folderName
+let urlid
 
-submitBtn.addEventListener('click', (e)=> {
+if(bookmark){
+bookmark.addEventListener('click', (e) => {
+  e.preventDefault()
+  urlid = e.target.innerHTML
+  const server = (`http://localhost:3000/api/folders/${folderName}/urls/${urlid}`)
+  fetch(server, {
+    method:'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    body: JSON.stringify({
+      counter,
+    })
+  })
+  .then(res => res.json())
+})
+}
+
+submitBtnFolder.addEventListener('click', (e)=> {
   e.preventDefault()
   const userInput = document.querySelector('.user-input')
   const server = ('http://localhost:3000/api/folders')
@@ -22,25 +42,7 @@ submitBtn.addEventListener('click', (e)=> {
   userInput.value = ''
 })
 
-submitBtnUrl.addEventListener('click', (e)=> {
-  e.preventDefault()
-  const urlInput = document.querySelector('.url-input')
-  console.log(folderName);
-  const server = (`http://localhost:3000/api/folders/${folderName}/urls`)
-  fetch(server, {
-    method:'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-    body: JSON.stringify({
-      longURL: urlInput.value,
-    })
-  })
-  .then(res => res.json())
-  .then(res => getFolderURLS())
-  urlInput.value = ''
-})
+
 
 
 folderList.addEventListener('click', (e)=> {
@@ -57,6 +59,31 @@ folderList.addEventListener('click', (e)=> {
     <button class="popularity-btn">Popularity</button>
     <button class="date-btn">Date Created</button>
   </section>`
+
+
+  document.querySelector('.submit-btn-url').addEventListener('click', (e)=> {
+    console.log('fired');
+    e.preventDefault()
+    const urlInput = document.querySelector('.url-input')
+    console.log(folderName);
+    const server = (`http://localhost:3000/api/folders/${folderName}/urls`)
+    fetch(server, {
+      method:'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        longURL: urlInput.value,
+        date: Date.now(),
+        counter: 0
+      })
+    })
+    .then(res => res.json())
+    .then(res => getFolderURLS())
+    urlInput.value = ''
+  })
+
 })
 
 function getFolders(){
@@ -87,7 +114,7 @@ function getFolderURLS(){
 }
 
 function shortenURL(bookmark){
-  return bookmark.reduce((acc, link) => `${acc} <li class="url-list"><a class="link" href="${link.longURL}">${link.shortenedURL.slice(0,3)}.${link.shortenedURL.slice(4,6)}</a></li>`, '')
+  return bookmark.reduce((acc, link) => `${acc} <li class="url-list"><a class="link" target="_blank"  href="${link.longURL}">${link.shortenedURL.slice(0,3)}.${link.shortenedURL.slice(4,6)}</a></li><p>Counter: ${link.counter}, Date: ${link.date}`, '')
 }
 
 window.onload = getFolders()

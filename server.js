@@ -36,9 +36,9 @@ app.post('/api/folders', (req, res)=> {
 })
 
 app.post('/api/folders/:folderName/urls', (req, res)=> {
-  const { longURL } = req.body
+  const { longURL, counter, date } = req.body
   const { folderName } = req.params
-  app.locals.urls.push({ longURL: longURL, shortenedURL: md5(longURL), folderID: folderName })
+  app.locals.urls.push({ id: md5(longURL) + 13, longURL: longURL, shortenedURL: md5(longURL), folderID: folderName, counter: counter, date: date })
   const url = app.locals.urls.filter((url)=> {
     return url.folderID == folderName
   })
@@ -48,6 +48,18 @@ app.post('/api/folders/:folderName/urls', (req, res)=> {
   res.send(url)
   console.log(app.locals.urls);
 })
+
+app.patch('/api/folders/:folderName/urls/:id', (req, res) => {
+  const { counter } = req.body
+  const { id, folderName } = req.params
+  const url = app.locals.urls.filter((url)=> {
+    return url.id == id
+  })
+// find the URL that you want to update
+  counter = counter ++
+  // update just the counter property of that URL
+  res.send(counter)
+});
 
 app.get('/api/folders/urls/:folderName', (req, res)=> {
   const { folderName } = req.params
