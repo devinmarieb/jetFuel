@@ -1,6 +1,8 @@
 const submitBtn = document.querySelector('.submit-btn')
 const folderList = document.querySelector('.folders')
 const submitBtnUrl= document.querySelector('.btn-url')
+const urlLink = document.querySelector('.link')
+const counter  = 0
 
 submitBtnUrl.addEventListener('click', (e)=> {
   e.preventDefault()
@@ -39,6 +41,14 @@ submitBtn.addEventListener('click', (e)=> {
   .then(res => getFolders())
   userInput.value = ''
 })
+
+if(urlLink){//put counter in server side
+  urlLink.addEventListener('click', (e) => {
+    e.preventDefault()
+    this.counter++
+  } )
+}
+
 function getURLS(){
   const server = ('http://localhost:3000/api/urls')
   fetch(server, {
@@ -54,7 +64,7 @@ function getURLS(){
 }
 
 function shortenURL(url){
-  return url.reduce((acc, link) => `${acc} <li class="url-list"><a href="${link.longURL}">${link.id.slice(0,3)}.${link.id.slice(4,6)}</a></li>`, '')
+  return url.reduce((acc, link) => `${acc} <li class="url-list"><a class="link" href="${link.longURL}">${link.id.slice(0,3)}.${link.id.slice(4,6)}</a></li><p>Visited: ${counter} times</p>`, '')
 }
 
 function getFolders(){
