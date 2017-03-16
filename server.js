@@ -85,6 +85,10 @@ app.get('/api/folders', (req, res)=> {
    res.json(folders)
 })
 
-app.listen(app.get('port'), ()=> {
-  console.log('Magic is running on 3000')
-})
+if(!module.parent){
+  app.listen(app.get('port'), ()=> {
+    console.log('Magic is running on 3000')
+  })
+}
+
+module.exports = app
