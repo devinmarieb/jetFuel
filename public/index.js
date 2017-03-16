@@ -54,7 +54,7 @@ function getURLS(){
 }
 
 function shortenURL(url){
-  return url.reduce((acc, link) => `${acc} <li class="url-list">${link.id.slice(0,3)}.${link.id.slice(4,6)}</li>`, '')
+  return url.reduce((acc, link) => `${acc} <li class="url-list"><a href="${link.longURL}">${link.id.slice(0,3)}.${link.id.slice(4,6)}</a></li>`, '')
 }
 
 function getFolders(){
