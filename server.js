@@ -23,6 +23,7 @@ app.set('port', process.env.PORT || 3000)
 
 app.locals.folders = [{id: '1', name: 'test'}]
 
+
 app.locals.urls = [{ id: '1', longURL: 'http://www.google.com', shortenedURL: 'Animals', folderID: 'test'},
 { id: '2', shortenedURL: 'Food', folderID: 'test'}
 ]
@@ -37,7 +38,7 @@ app.post('/api/folders', (req, res)=> {
 app.post('/api/folders/:folderName/urls', (req, res)=> {
   const { longURL } = req.body
   const { folderName } = req.params
-  app.locals.urls.push({ longURL: longURL, shortenedURL: longURL, folderID: folderName })
+  app.locals.urls.push({ longURL: longURL, shortenedURL: md5(longURL), folderID: folderName })
   const url = app.locals.urls.filter((url)=> {
     return url.folderID == folderName
   })
