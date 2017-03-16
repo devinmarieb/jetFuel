@@ -1,6 +1,5 @@
 const submitBtn = document.querySelector('.submit-btn')
 const folderList = document.querySelector('.folders')
-const submitBtnUrl = document.querySelector('.right')
 let folderName
 
 submitBtn.addEventListener('click', (e)=> {
@@ -22,27 +21,6 @@ submitBtn.addEventListener('click', (e)=> {
   userInput.value = ''
 })
 
-submitBtnUrl.addEventListener('click', (e)=> {
-  e.preventDefault()
-  const urlInput = document.querySelector('.url-input')
-  // console.log(folderName);
-  const server = (`http://localhost:3000/api/folders/${folderName}/urls`)
-  fetch(server, {
-    method:'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-    body: JSON.stringify({
-      longURL: urlInput.value,
-      shortenedURL: urlInput.value,
-    })
-  })
-  .then(res => res.json())
-  .then(res => getFolderURLS(folderName))
-  urlInput.value = ''
-})
-
 folderList.addEventListener('click', (e)=> {
   const id = e.target.dataset.id
   folderName = e.target.dataset.id
@@ -57,6 +35,27 @@ folderList.addEventListener('click', (e)=> {
     <button class="popularity-btn">Popularity</button>
     <button class="date-btn">Date Created</button>
   </section>`
+
+  document.querySelector('.submit-btn-url').addEventListener('click', (e)=> {
+    e.preventDefault()
+    const urlInput = document.querySelector('.url-input')
+    const server = (`http://localhost:3000/api/folders/${folderName}/urls`)
+    fetch(server, {
+      method:'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        longURL: urlInput.value,
+        shortenedURL: urlInput.value,
+      })
+    })
+    .then(res => res.json())
+    .then(res => getFolderURLS(folderName))
+    urlInput.value = ''
+  })
+
   toggleFolder(e, id)
 })
 
