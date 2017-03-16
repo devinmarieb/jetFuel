@@ -26,6 +26,7 @@ submitBtn.addEventListener('click', (e)=> {
 submitBtnUrl.addEventListener('click', (e)=> {
   e.preventDefault()
   const urlInput = document.querySelector('.url-input')
+  console.log(folderName);
   const server = (`http://localhost:3000/api/folders/${folderName}/urls`)
   fetch(server, {
     method:'POST',
@@ -68,7 +69,7 @@ function getFolders(){
   }))
 }
 
-function getFolderURLS(id, folderName){
+function getFolderURLS(){
   const server = (`http://localhost:3000/api/folders/urls/${folderName}`)
   fetch(server, {
     method:'GET',

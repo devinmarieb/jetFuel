@@ -18,14 +18,13 @@ app.use(bodyParser.json())
 app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('public'))
-// app.use('/api/folders/:id', express.static('public/urlIndex.html'))
 
 app.set('port', process.env.PORT || 3000)
 
 app.locals.folders = [{id: '1', name: 'test'}]
 
 app.locals.urls = [{ id: '1', longURL: 'http://www.google.com', shortenedURL: 'Animals', folderID: 'test'},
-{ id: '2', longURL: 'Animals.com', shortenedURL: 'Food', folderID: 'test'}
+{ id: '2', shortenedURL: 'Food', folderID: 'test'}
 ]
 
 app.post('/api/folders', (req, res)=> {
@@ -37,21 +36,22 @@ app.post('/api/folders', (req, res)=> {
 
 app.post('/api/folders/:folderName/urls', (req, res)=> {
   const { longURL } = req.body
-  const { folderID, folderName } = req.params
-  app.locals.urls.push({ longURL, folderID })
+  const { folderName } = req.params
+  app.locals.urls.push({ longURL: longURL, shortenedURL: longURL, folderID: folderName })
   const url = app.locals.urls.filter((url)=> {
-    return url.folderID === folderName
+    return url.folderID == folderName
   })
     if(!url) {
       return res.sendStatus(404)
     }
   res.send(url)
+  console.log(app.locals.urls);
 })
 
 app.get('/api/folders/urls/:folderName', (req, res)=> {
   const { folderName } = req.params
   const url = app.locals.urls.filter((url)=> {
-    return url.folderID === folderName
+    return url.folderID == folderName
   })
     if(!url) {
       return res.sendStatus(404)
@@ -62,11 +62,6 @@ app.get('/api/folders/urls/:folderName', (req, res)=> {
 app.get('/api/folders', (req, res)=> {
   const folders = app.locals.folders
    res.json(folders)
-})
-
-app.get('/api/urls', (req, res)=> {
-  const urls = app.locals.urls
-   res.json(urls)
 })
 
 app.listen(app.get('port'), ()=> {
