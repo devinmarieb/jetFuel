@@ -50,11 +50,11 @@ function getURLS(){
   })
   .then(res => res.json())
   .then(res => shortenURL(res))
-  .then(str => document.querySelector('#urls').innerHTML = str.slice(0,4))
+  .then(str => document.querySelector('#urls').innerHTML = str)
 }
 
 function shortenURL(url){
-  return url.reduce((acc, link) => `${acc} <li class="url-list">${link.id}</li>`, '')
+  return url.reduce((acc, link) => `${acc} <li class="url-list">${link.id.slice(0,3)}.${link.id.slice(4,6)}</li>`, '')
 }
 
 function getFolders(){
@@ -83,7 +83,8 @@ folderList.addEventListener('click', (e)=> {
     },
   })
   .then(res => res.json())
-  .then(res => document.querySelector('.urls').innerHTML = res.map((url)=> {
+  .then(res => document.querySelector('.urls').innerHTML)
+  .then(res => res.map((url)=> {
     return (`<li>${url.shortenedURL}</li>`)
   }))
   document.querySelector('.right').style = 'display: upset'
