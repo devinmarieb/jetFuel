@@ -1,6 +1,7 @@
 const submitBtn = document.querySelector('.submit-btn')
 const folderList = document.querySelector('.folders')
 const submitBtnUrl = document.querySelector('.right')
+let folderName
 
 
 submitBtn.addEventListener('click', (e)=> {
@@ -25,7 +26,7 @@ submitBtn.addEventListener('click', (e)=> {
 submitBtnUrl.addEventListener('click', (e)=> {
   e.preventDefault()
   const urlInput = document.querySelector('.url-input')
-  const server = ('http://localhost:3000/api/urls')
+  const server = (`http://localhost:3000/api/folders/${folderName}/urls`)
   fetch(server, {
     method:'POST',
     headers: {
@@ -37,12 +38,14 @@ submitBtnUrl.addEventListener('click', (e)=> {
     })
   })
   .then(res => res.json())
+  .then(res => getFolderURLS())
   urlInput.value = ''
 })
 
 folderList.addEventListener('click', (e)=> {
   const id = e.target.dataset.id
-  getFolderURLS(id)
+  folderName = e.target.innerHTML
+  getFolderURLS(id, folderName)
   document.querySelector('.right').innerHTML =
   `<aside>
     <input placeholder="Enter a URL" class="url-input" />
@@ -65,8 +68,8 @@ function getFolders(){
   }))
 }
 
-function getFolderURLS(id){
-  const server = (`http://localhost:3000/api/folders/${id}`)
+function getFolderURLS(id, folderName){
+  const server = (`http://localhost:3000/api/folders/urls/${folderName}`)
   fetch(server, {
     method:'GET',
     headers: {
