@@ -4,24 +4,6 @@ const bookmark = document.querySelector('.link')
 let folderName
 let urlid
 
-if(bookmark){
-bookmark.addEventListener('click', (e) => {
-  e.preventDefault()
-  urlid = e.target.innerHTML
-  const server = (`http://localhost:3000/api/folders/${folderName}/urls/${urlid}`)
-  fetch(server, {
-    method:'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-    body: JSON.stringify({
-      counter,
-    })
-  })
-  .then(res => res.json())
-})
-}
 
 submitBtnFolder.addEventListener('click', (e)=> {
   e.preventDefault()
@@ -113,8 +95,18 @@ function getFolderURLS(){
   .then(res => document.querySelector('.url-container').innerHTML = shortenURL(res))
 }
 
+http://localhost:3000/api/folders/foo/urls
+
+
+http://gabi.com/thqiuf
+
+
+<a href="http://localhost:3000/api/urls/thquif">Link</a>
+http://google.com/?searchTerms=amazon+shopping+list+books+new+releases
+
+
 function shortenURL(bookmark){
-  return bookmark.reduce((acc, link) => `${acc} <li class="url-list"><a class="link" target="_blank"  href="${link.longURL}">${link.shortenedURL.slice(0,3)}.${link.shortenedURL.slice(4,6)}</a></li><p>Counter: ${link.counter}, Date: ${link.date}`, '')
+  return bookmark.reduce((acc, link) => `${acc} <li class="url-list"><a class="link" target="_blank"  href="${link.shortenedURL}">${link.shortenedURL.slice(0,3)}.${link.shortenedURL.slice(4,6)}</a></li><p>Counter: ${link.counter}, Date: ${link.date}`, '')
 }
 
 window.onload = getFolders()

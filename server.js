@@ -49,6 +49,14 @@ app.post('/api/folders/:folderName/urls', (req, res)=> {
   console.log(app.locals.urls);
 })
 
+// app.get('/api/urls/:shortenedUrlId', (req, res) => {
+//   // let urlObject = app.locals.urls.filter()
+//   // get the URL object out of app.locals based on
+//   // our req.params.shortenedUrlId
+//   // update the counter
+//   // res.redirect(urlObject.longUrl)
+// });
+
 app.patch('/api/folders/:folderName/urls/:id', (req, res) => {
   const { counter } = req.body
   const { id, folderName } = req.params
