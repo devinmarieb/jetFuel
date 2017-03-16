@@ -24,12 +24,9 @@ submitBtnFolder.addEventListener('click', (e)=> {
   userInput.value = ''
 })
 
-
-
-
 folderList.addEventListener('click', (e)=> {
   const id = e.target.dataset.id
-  folderName = e.target.innerHTML
+  folderName = e.target.dataset.id
   getFolderURLS(id, folderName)
   document.querySelector('.right').innerHTML =
   `<section>
@@ -44,10 +41,8 @@ folderList.addEventListener('click', (e)=> {
 
 
   document.querySelector('.submit-btn-url').addEventListener('click', (e)=> {
-    console.log('fired');
     e.preventDefault()
     const urlInput = document.querySelector('.url-input')
-    console.log(folderName);
     const server = (`http://localhost:3000/api/folders/${folderName}/urls`)
     fetch(server, {
       method:'POST',
@@ -57,15 +52,15 @@ folderList.addEventListener('click', (e)=> {
       },
       body: JSON.stringify({
         longURL: urlInput.value,
-        date: Date.now(),
-        counter: 0
+        shortenedURL: urlInput.value,
       })
     })
     .then(res => res.json())
-    .then(res => getFolderURLS())
+    .then(res => getFolderURLS(folderName))
     urlInput.value = ''
   })
 
+  toggleFolder(e, id)
 })
 
 function getFolders(){
@@ -82,8 +77,9 @@ function getFolders(){
   )
 }
 
-function getFolderURLS(){
-  const server = (`http://localhost:3000/api/folders/urls/${folderName}`)
+function getFolderURLS(id){
+  debugger
+  const server = (`http://localhost:3000/api/folders/${id}/urls`)
   fetch(server, {
     method:'GET',
     headers: {
@@ -107,6 +103,15 @@ http://google.com/?searchTerms=amazon+shopping+list+books+new+releases
 
 function shortenURL(bookmark){
   return bookmark.reduce((acc, link) => `${acc} <li class="url-list"><a class="link" target="_blank"  href="${link.shortenedURL}">${link.shortenedURL.slice(0,3)}.${link.shortenedURL.slice(4,6)}</a></li><p>Counter: ${link.counter}, Date: ${link.date}`, '')
+}
+
+function toggleFolder(e, id) {
+  const folder = e.target
+  const folderID = e.target.dataset.id
+  var i
+  if(folderID === id) {
+    folder.classList.add('folder-clicked')
+  }
 }
 
 window.onload = getFolders()

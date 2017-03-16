@@ -8,6 +8,10 @@ const fs = require('fs')
 const morgan = require('morgan')
 const app = express()
 
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require('./knexfile')[environment];
+const database = require('knex')(configuration);
+
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -21,32 +25,30 @@ app.use(express.static('public'))
 
 app.set('port', process.env.PORT || 3000)
 
-app.locals.folders = [{id: '1', name: 'test'}]
-
-
-app.locals.urls = [{ id: '1', longURL: 'http://www.google.com', shortenedURL: 'Animals', folderID: 'test'},
-{ id: '2', shortenedURL: 'Food', folderID: 'test'}
-]
 
 app.post('/api/folders', (req, res)=> {
   const { name } = req.body
-  const id = md5(name)
-  app.locals.folders.push({ id, name })
-  res.json({ id, name })
+  const folder = { name }
+  database('folders').insert(folder)
+  .then(function() {
+    database('folders').select()
+            .then(function(folders) {
+              res.status(200).json(folders);
+            })
+            .catch(function(error) {
+              console.error('somethings wrong with db')
+            });
+  })
 })
 
-app.post('/api/folders/:folderName/urls', (req, res)=> {
-  const { longURL, counter, date } = req.body
-  const { folderName } = req.params
-  app.locals.urls.push({ id: md5(longURL) + 13, longURL: longURL, shortenedURL: md5(longURL), folderID: folderName, counter: counter, date: date })
-  const url = app.locals.urls.filter((url)=> {
-    return url.folderID == folderName
+app.get('/api/folders/:id/urls', (request, response) => {
+  database('urls').where('folderID', request.params.id).select()
+  .then(function(urls) {
+    response.status(200).json(urls);
   })
-    if(!url) {
-      return res.sendStatus(404)
-    }
-  res.send(url)
-  console.log(app.locals.urls);
+  .catch(function(error) {
+    console.error('somethings wrong with db')
+  });
 })
 
 // app.get('/api/urls/:shortenedUrlId', (req, res) => {
@@ -69,20 +71,31 @@ app.patch('/api/folders/:folderName/urls/:id', (req, res) => {
   res.send(counter)
 });
 
-app.get('/api/folders/urls/:folderName', (req, res)=> {
-  const { folderName } = req.params
-  const url = app.locals.urls.filter((url)=> {
-    return url.folderID == folderName
+
+app.post('/api/folders/:id/urls', (req, res)=> {
+  const { longURL } = req.body
+  const { id } = req.params
+  const url = { longURL, shortenedURL: md5(longURL), folderID: id, clicks: 0, created_at: null }
+  database('urls').insert(url)
+  .then(function() {
+    database('urls').where('folderID', id).select()
+            .then(function(urls) {
+              res.status(200).json(urls);
+            })
+            .catch(function(error) {
+              console.error('somethings wrong with db')
+            });
   })
-    if(!url) {
-      return res.sendStatus(404)
-    }
-  res.send(url)
 })
 
-app.get('/api/folders', (req, res)=> {
-  const folders = app.locals.folders
-   res.json(folders)
+app.get('/api/folders', (request, response) => {
+  database('folders').select()
+          .then(function(folders) {
+            response.status(200).json(folders);
+          })
+          .catch(function(error) {
+            console.error('somethings wrong with db')
+          });
 })
 
 if(!module.parent){
@@ -92,3 +105,25 @@ if(!module.parent){
 }
 
 module.exports = app
+
+
+
+
+
+
+
+
+
+
+
+
+// app.get('/api/urls', (request, response) => {
+//   database('urls').select()
+//           .then(function(urls) {
+//             response.status(200).json(urls);
+//           })
+//           .catch(function(error) {
+//             console.error('somethings wrong with db')
+//           });
+// })
+>>>>>>> 25251a6fc0e8738e30cb7870b316529812089d61
