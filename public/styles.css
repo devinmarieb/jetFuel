@@ -16,7 +16,7 @@
   font-family: 'Faster One', cursive;
 }
 
-.user-input {
+.user-input, .url-input {
   padding: 5px;
   width: 200px;
   outline: none;
@@ -25,17 +25,21 @@
   font-size: 24px;
 }
 
-.submit-btn {
+.submit-btn, .submit-btn-url, .popularity-btn, .date-btn {
   margin-left: 20px;
-  padding: 5px;
-  width: 100px;
+  padding: 10px;
   background-color: magenta;
   color: white;
   border: none;
   outline: none;
-  border-radius: 20px;
+  border-radius: 40px;
   font-size: 24px;
 }
+
+.submit-btn:hover, .submit-btn-url:hover, .popularity-btn:hover, .date-btn:hover {
+  background-color: black;
+}
+
 
 .folder-list {
   margin: 10px;
@@ -44,4 +48,14 @@
 
 li {
   list-style: none;
+}
+
+.new-url-container {
+  diplay: block;
+  margin-bottom: 30px;
+}
+
+.sort-by {
+  display: inline-block;
+  font-size: 24px;
 }

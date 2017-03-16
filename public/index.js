@@ -48,10 +48,15 @@ folderList.addEventListener('click', (e)=> {
   folderName = e.target.innerHTML
   getFolderURLS(id, folderName)
   document.querySelector('.right').innerHTML =
-  `<aside>
-    <input placeholder="Enter a URL" class="url-input" />
-    <input type="submit" value="Shorten" class="submit-btn-url"/>
-  </aside>`
+  `<section>
+    <aside class="new-url-container">
+      <input placeholder="Enter a URL" class="url-input" />
+      <input type="submit" value="Shorten" class="submit-btn-url"/>
+    </aside>
+    <p class="sort-by"> Sort By: </p>
+    <button class="popularity-btn">Popularity</button>
+    <button class="date-btn">Date Created</button>
+  </section>`
 })
 
 function getFolders(){
