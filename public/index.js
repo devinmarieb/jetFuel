@@ -67,10 +67,9 @@ function getFolders(){
     },
   })
   .then(res => res.json())
-  .then(res => document.querySelector('.folders').innerHTML = res.map((folder) => {
-    return (`<ul data-id=${folder.id} class="folder-list">${folder.name}</ul>`)
-  })
-)}
+  .then(res => document.querySelector('.folders').innerHTML = res.reduce((acc,folder) => `${acc} <ul data-id=${folder.id} class="folder-list">${folder.name}</ul>`,'')
+  )
+}
 
 folderList.addEventListener('click', (e)=> {
   const id = e.target.dataset.id
