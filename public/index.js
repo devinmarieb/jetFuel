@@ -42,7 +42,6 @@ submitBtnUrl.addEventListener('click', (e)=> {
   urlInput.value = ''
 })
 
-
 folderList.addEventListener('click', (e)=> {
   const id = e.target.dataset.id
   folderName = e.target.innerHTML
@@ -57,6 +56,7 @@ folderList.addEventListener('click', (e)=> {
     <button class="popularity-btn">Popularity</button>
     <button class="date-btn">Date Created</button>
   </section>`
+  toggleFolder(e, id)
 })
 
 function getFolders(){
@@ -88,6 +88,15 @@ function getFolderURLS(){
 
 function shortenURL(bookmark){
   return bookmark.reduce((acc, link) => `${acc} <li class="url-list"><a class="link" href="${link.longURL}">${link.shortenedURL.slice(0,3)}.${link.shortenedURL.slice(4,6)}</a></li>`, '')
+}
+
+function toggleFolder(e, id) {
+  const folder = e.target
+  const folderID = e.target.dataset.id
+  var i
+  if(folderID === id) {
+    folder.classList.add('folder-clicked')
+  }
 }
 
 window.onload = getFolders()

@@ -40,19 +40,29 @@
   background-color: black;
 }
 
-
 .folder-list {
   margin: 10px;
   font-size: 24px;
 }
 
+.folder-clicked {
+  color: magenta;
+}
+
 li {
   list-style: none;
+  font-size: 18px;
 }
 
 .new-url-container {
   diplay: block;
   margin-bottom: 30px;
+}
+
+.url-container {
+  margin-top: 20px;
+  width: 50%;
+  float: right;
 }
 
 .sort-by {
