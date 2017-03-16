@@ -2,31 +2,6 @@ const submitBtn = document.querySelector('.submit-btn')
 const folderList = document.querySelector('.folders')
 const submitBtnUrl = document.querySelector('.right')
 let folderName
-// <<<<<<< HEAD
-// const submitBtnUrl= document.querySelector('.btn-url')
-// const urlLink = document.querySelector('.link')
-// const counter  = 0
-//
-// submitBtnUrl.addEventListener('click', (e)=> {
-//   e.preventDefault()
-//   const urlInput = document.querySelector('.url-input')
-//   const server = ('http://localhost:3000/api/urls')
-//   fetch(server, {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Accept': 'application/json',
-//     },
-//     body: JSON.stringify({
-//       longURL: urlInput.value
-//     })
-//   })
-//   .then(res => res.json())
-//   .then(res => getURLS())
-//   urlInput.value = ''
-// })
-// =======
-
 
 submitBtn.addEventListener('click', (e)=> {
   e.preventDefault()
@@ -83,7 +58,6 @@ folderList.addEventListener('click', (e)=> {
     <button class="date-btn">Date Created</button>
   </section>`
 })
->>>>>>> master
 
 function getFolders(){
   const server = ('http://localhost:3000/api/folders')
@@ -109,18 +83,11 @@ function getFolderURLS(){
     },
   })
   .then(res => res.json())
-<<<<<<< HEAD
-  .then(res => document.querySelector('.urls').innerHTML)
-  .then(res => res.map((url)=> {
-    return (`<li>${url.shortenedURL}</li>`)
-=======
-  .then(res => document.querySelector('.url-container').innerHTML = res.map((url) => {
-    return (`<li><a href=${url.longURL} class="url-link">${url.shortenedURL}</a></li>`)
->>>>>>> master
-  }))
+  .then(res => document.querySelector('.url-container').innerHTML = shortenURL(res))
 }
-function shortenURL(url){
-  return url.reduce((acc, link) => `${acc} <li class="url-list"><a class="link" href="${link.longURL}">${link.id.slice(0,3)}.${link.id.slice(4,6)}</a></li><p>Visited: ${counter} times</p>`, '')
+
+function shortenURL(bookmark){
+  return bookmark.reduce((acc, link) => `${acc} <li class="url-list"><a class="link" href="${link.longURL}">${link.shortenedURL.slice(0,3)}.${link.shortenedURL.slice(4,6)}</a></li>`, '')
 }
 
 window.onload = getFolders()
