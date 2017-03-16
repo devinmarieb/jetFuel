@@ -1,27 +1,32 @@
 const submitBtn = document.querySelector('.submit-btn')
 const folderList = document.querySelector('.folders')
-const submitBtnUrl= document.querySelector('.btn-url')
-const urlLink = document.querySelector('.link')
-const counter  = 0
+const submitBtnUrl = document.querySelector('.right')
+let folderName
+// <<<<<<< HEAD
+// const submitBtnUrl= document.querySelector('.btn-url')
+// const urlLink = document.querySelector('.link')
+// const counter  = 0
+//
+// submitBtnUrl.addEventListener('click', (e)=> {
+//   e.preventDefault()
+//   const urlInput = document.querySelector('.url-input')
+//   const server = ('http://localhost:3000/api/urls')
+//   fetch(server, {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Accept': 'application/json',
+//     },
+//     body: JSON.stringify({
+//       longURL: urlInput.value
+//     })
+//   })
+//   .then(res => res.json())
+//   .then(res => getURLS())
+//   urlInput.value = ''
+// })
+// =======
 
-submitBtnUrl.addEventListener('click', (e)=> {
-  e.preventDefault()
-  const urlInput = document.querySelector('.url-input')
-  const server = ('http://localhost:3000/api/urls')
-  fetch(server, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-    body: JSON.stringify({
-      longURL: urlInput.value
-    })
-  })
-  .then(res => res.json())
-  .then(res => getURLS())
-  urlInput.value = ''
-})
 
 submitBtn.addEventListener('click', (e)=> {
   e.preventDefault()
@@ -42,30 +47,43 @@ submitBtn.addEventListener('click', (e)=> {
   userInput.value = ''
 })
 
-if(urlLink){//put counter in server side
-  urlLink.addEventListener('click', (e) => {
-    e.preventDefault()
-    this.counter++
-  } )
-}
-
-function getURLS(){
-  const server = ('http://localhost:3000/api/urls')
+submitBtnUrl.addEventListener('click', (e)=> {
+  e.preventDefault()
+  const urlInput = document.querySelector('.url-input')
+  console.log(folderName);
+  const server = (`http://localhost:3000/api/folders/${folderName}/urls`)
   fetch(server, {
-    method:'GET',
+    method:'POST',
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     },
+    body: JSON.stringify({
+      longURL: urlInput.value,
+    })
   })
   .then(res => res.json())
-  .then(res => shortenURL(res))
-  .then(str => document.querySelector('#urls').innerHTML = str)
-}
+  .then(res => getFolderURLS())
+  urlInput.value = ''
+})
 
-function shortenURL(url){
-  return url.reduce((acc, link) => `${acc} <li class="url-list"><a class="link" href="${link.longURL}">${link.id.slice(0,3)}.${link.id.slice(4,6)}</a></li><p>Visited: ${counter} times</p>`, '')
-}
+
+folderList.addEventListener('click', (e)=> {
+  const id = e.target.dataset.id
+  folderName = e.target.innerHTML
+  getFolderURLS(id, folderName)
+  document.querySelector('.right').innerHTML =
+  `<section>
+    <aside class="new-url-container">
+      <input placeholder="Enter a URL" class="url-input" />
+      <input type="submit" value="Shorten" class="submit-btn-url"/>
+    </aside>
+    <p class="sort-by"> Sort By: </p>
+    <button class="popularity-btn">Popularity</button>
+    <button class="date-btn">Date Created</button>
+  </section>`
+})
+>>>>>>> master
 
 function getFolders(){
   const server = ('http://localhost:3000/api/folders')
@@ -81,9 +99,8 @@ function getFolders(){
   )
 }
 
-folderList.addEventListener('click', (e)=> {
-  const id = e.target.dataset.id
-  const server = (`http://localhost:3000/api/folders/${id}`)
+function getFolderURLS(){
+  const server = (`http://localhost:3000/api/folders/urls/${folderName}`)
   fetch(server, {
     method:'GET',
     headers: {
@@ -92,13 +109,18 @@ folderList.addEventListener('click', (e)=> {
     },
   })
   .then(res => res.json())
+<<<<<<< HEAD
   .then(res => document.querySelector('.urls').innerHTML)
   .then(res => res.map((url)=> {
     return (`<li>${url.shortenedURL}</li>`)
+=======
+  .then(res => document.querySelector('.url-container').innerHTML = res.map((url) => {
+    return (`<li><a href=${url.longURL} class="url-link">${url.shortenedURL}</a></li>`)
+>>>>>>> master
   }))
-  document.querySelector('.right').style = 'display: upset'
-})
-
-
+}
+function shortenURL(url){
+  return url.reduce((acc, link) => `${acc} <li class="url-list"><a class="link" href="${link.longURL}">${link.id.slice(0,3)}.${link.id.slice(4,6)}</a></li><p>Visited: ${counter} times</p>`, '')
+}
 
 window.onload = getFolders()

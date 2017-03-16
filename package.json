@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/gprocell927/jetFuel#readme",
   "dependencies": {
+    "morgan": "^1.8.1",
     "nodemon": "^1.11.0"
   },
   "devDependencies": {
