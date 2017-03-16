@@ -25,7 +25,7 @@ submitBtn.addEventListener('click', (e)=> {
 submitBtnUrl.addEventListener('click', (e)=> {
   e.preventDefault()
   const urlInput = document.querySelector('.url-input')
-  console.log(folderName);
+  // console.log(folderName);
   const server = (`http://localhost:3000/api/folders/${folderName}/urls`)
   fetch(server, {
     method:'POST',
@@ -35,16 +35,17 @@ submitBtnUrl.addEventListener('click', (e)=> {
     },
     body: JSON.stringify({
       longURL: urlInput.value,
+      shortenedURL: urlInput.value,
     })
   })
   .then(res => res.json())
-  .then(res => getFolderURLS())
+  .then(res => getFolderURLS(folderName))
   urlInput.value = ''
 })
 
 folderList.addEventListener('click', (e)=> {
   const id = e.target.dataset.id
-  folderName = e.target.innerHTML
+  folderName = e.target.dataset.id
   getFolderURLS(id, folderName)
   document.querySelector('.right').innerHTML =
   `<section>
@@ -73,8 +74,9 @@ function getFolders(){
   )
 }
 
-function getFolderURLS(){
-  const server = (`http://localhost:3000/api/folders/urls/${folderName}`)
+function getFolderURLS(id){
+  debugger
+  const server = (`http://localhost:3000/api/folders/${id}/urls`)
   fetch(server, {
     method:'GET',
     headers: {
