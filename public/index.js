@@ -1,7 +1,6 @@
 const submitBtn = document.querySelector('.submit-btn')
 const folderList = document.querySelector('.folders')
 const URLList = document.querySelector('.url-container')
-
 let folderName
 
 submitBtn.addEventListener('click', (e)=> {
@@ -46,7 +45,7 @@ URLList.addEventListener('click', (e)=> {
     const id = e.target.id
     const server = (`http://localhost:3000/api/urls/${id}`)
     fetch(server, {
-      method: 'GET',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
