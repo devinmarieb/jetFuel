@@ -6,7 +6,7 @@ let folderName
 submitBtn.addEventListener('click', (e)=> {
   e.preventDefault()
   const userInput = document.querySelector('.user-input')
-  const server = ('http://localhost:3000/api/folders')
+  const server = ('/api/folders')
   fetch(server, {
     method:'POST',
     headers: {
@@ -40,7 +40,7 @@ folderList.addEventListener('click', (e)=> {
 
 // URLList.addEventListener('click', (e)=> {
 //     const id = e.target.id
-//     const server = (`http://localhost:3000/api/urls/${id}`)
+//     const server = (`/api/urls/${id}`)
 //     fetch(server, {
 //       method:'PATCH',
 //       headers: {
@@ -53,7 +53,7 @@ folderList.addEventListener('click', (e)=> {
 // })
 
 function getFolders(){
-  const server = ('http://localhost:3000/api/folders')
+  const server = ('/api/folders')
   fetch(server, {
     method:'GET',
     headers: {
@@ -67,7 +67,7 @@ function getFolders(){
 }
 
 function getFolderURLS(id){
-  const server = (`http://localhost:3000/api/folders/${id}/urls`)
+  const server = (`/api/folders/${id}/urls`)
   fetch(server, {
     method:'GET',
     headers: {
@@ -92,7 +92,7 @@ function postNewURL() {
     document.querySelector('.submit-btn-url').addEventListener('click', (e)=> {
     e.preventDefault()
     const urlInput = document.querySelector('.url-input')
-    const server = (`http://localhost:3000/api/folders/${folderName}/urls`)
+    const server = (`/api/folders/${folderName}/urls`)
     fetch(server, {
       method:'POST',
       headers: {
