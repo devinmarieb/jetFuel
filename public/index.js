@@ -32,9 +32,6 @@ folderList.addEventListener('click', (e)=> {
       <input placeholder="Enter a URL" class="url-input" />
       <input type="submit" value="Shorten" class="submit-btn-url"/>
     </aside>
-    <p class="sort-by"> Sort By: </p>
-    <button class="popularity-btn">Popularity</button>
-    <button class="date-btn">Most Recent</button>
     <h1 class="folder-title">${e.target.innerHTML}</h1>
   </section>`
 
