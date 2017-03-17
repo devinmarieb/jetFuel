@@ -25,13 +25,6 @@ app.use(express.static('public'))
 
 app.set('port', process.env.PORT || 3000)
 
-// app.locals.folders = [{id: '1', name: 'test'}]
-//
-//
-// app.locals.urls = [{ id: '1', longURL: 'http://www.google.com', shortenedURL: 'Animals', folderID: 'test'},
-// { id: '2', shortenedURL: 'Food', folderID: 'test'}
-// ]
-
 app.post('/api/folders', (req, res)=> {
   const { name } = req.body
   const folder = { name }
@@ -83,27 +76,12 @@ app.get('/api/folders', (request, response) => {
           });
 })
 
+app.get('/api/urls/:id', (res, req)=> {
+  const { id } = req.params
+  database('urls').where('id', req.params.id).select()
+    .then(res.increment('clicks', 1).where('id', req.params.id))
+})
+
 app.listen(app.get('port'), ()=> {
   console.log('Magic is running on 3000')
 })
-
-
-
-
-
-
-
-
-
-
-
-
-// app.get('/api/urls', (request, response) => {
-//   database('urls').select()
-//           .then(function(urls) {
-//             response.status(200).json(urls);
-//           })
-//           .catch(function(error) {
-//             console.error('somethings wrong with db')
-//           });
-// })
