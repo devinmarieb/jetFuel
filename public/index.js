@@ -1,5 +1,7 @@
 const submitBtn = document.querySelector('.submit-btn')
 const folderList = document.querySelector('.folders')
+const URLList = document.querySelector('.url-container')
+
 let folderName
 
 submitBtn.addEventListener('click', (e)=> {
@@ -34,9 +36,64 @@ folderList.addEventListener('click', (e)=> {
     <p class="sort-by"> Sort By: </p>
     <button class="popularity-btn">Popularity</button>
     <button class="date-btn">Date Created</button>
+    <h1 class="folder-title">${e.target.innerHTML}</h1>
   </section>`
 
-  document.querySelector('.submit-btn-url').addEventListener('click', (e)=> {
+  postNewURL()
+})
+
+URLList.addEventListener('click', (e)=> {
+    const id = e.target.id
+    const server = (`http://localhost:3000/api/urls/${id}`)
+    fetch(server, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    })
+    .then(res => res.json())
+    .then(res => getFolderURLS(res))
+})
+
+function getFolders(){
+  const server = ('http://localhost:3000/api/folders')
+  fetch(server, {
+    method:'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+  })
+  .then(res => res.json())
+  .then(res => document.querySelector('.folders').innerHTML = res.reduce((acc,folder) => `${acc} <ul data-id=${folder.id} class="folder-list">${folder.name}</ul>`,'')
+  )
+}
+
+function getFolderURLS(id){
+  const server = (`http://localhost:3000/api/folders/${id}/urls`)
+  fetch(server, {
+    method:'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+  })
+  .then(res => res.json())
+  .then(res => document.querySelector('.url-container').innerHTML = shortenURL(res))
+}
+
+function shortenURL(bookmark){
+  return bookmark.reduce((acc, link) =>
+  `${acc} <li class="url-list">
+    <a class="link" href="${link.longURL}" target="_blank" data-id=${link.shortenedURL} id=${link.id}>
+      ${link.shortenedURL.slice(0,3)}.${link.shortenedURL.slice(4,6)}
+    </a>
+  </li>`, '')
+}
+
+function postNewURL() {
+    document.querySelector('.submit-btn-url').addEventListener('click', (e)=> {
     e.preventDefault()
     const urlInput = document.querySelector('.url-input')
     const server = (`http://localhost:3000/api/folders/${folderName}/urls`)
@@ -55,49 +112,7 @@ folderList.addEventListener('click', (e)=> {
     .then(res => getFolderURLS(folderName))
     urlInput.value = ''
   })
-
-  toggleFolder(e, id)
-})
-
-function getFolders(){
-  const server = ('http://localhost:3000/api/folders')
-  fetch(server, {
-    method:'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-  })
-  .then(res => res.json())
-  .then(res => document.querySelector('.folders').innerHTML = res.reduce((acc,folder) => `${acc} <ul data-id=${folder.id} class="folder-list">${folder.name}</ul>`,'')
-  )
 }
 
-function getFolderURLS(id){
-  debugger
-  const server = (`http://localhost:3000/api/folders/${id}/urls`)
-  fetch(server, {
-    method:'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-  })
-  .then(res => res.json())
-  .then(res => document.querySelector('.url-container').innerHTML = shortenURL(res))
-}
-
-function shortenURL(bookmark){
-  return bookmark.reduce((acc, link) => `${acc} <li class="url-list"><a class="link" href="${link.longURL}">${link.shortenedURL.slice(0,3)}.${link.shortenedURL.slice(4,6)}</a></li>`, '')
-}
-
-function toggleFolder(e, id) {
-  const folder = e.target
-  const folderID = e.target.dataset.id
-  var i
-  if(folderID === id) {
-    folder.classList.add('folder-clicked')
-  }
-}
 
 window.onload = getFolders()
