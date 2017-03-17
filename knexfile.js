@@ -1,12 +1,12 @@
 module.exports = {
   development: {
     client: 'pg',
-    connection:process.env.HEROKU_POSTGRESQL_SILVER_URL + `?ssl=true`,
+    connection:'postgres://localhost/jetfuel',
     migrations: {
       directory: './db/migrations'
     },
     seeds: {
-      directory: './db/seeds/production'
+      directory: './db/seeds/dev'
     },
     useNullAsDefault: true
   },
