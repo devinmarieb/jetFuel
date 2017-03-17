@@ -82,6 +82,10 @@ app.get('/api/urls/:id', (res, req)=> {
     .then(res.increment('clicks', 1).where('id', req.params.id))
 })
 
-app.listen(app.get('port'), ()=> {
-  console.log('Magic is running on 3000')
-})
+if(!module.parent){
+  app.listen(app.get('port'), ()=> {
+    console.log('Magic is running on 3000')
+  })
+}
+
+module.exports = app
