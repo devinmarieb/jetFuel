@@ -53,7 +53,7 @@ app.get('/api/folders/:id/urls', (request, response) => {
 app.post('/api/folders/:id/urls', (req, res)=> {
   const { longURL } = req.body
   const { id } = req.params
-  const url = { longURL, shortenedURL: md5(longURL), folderID: id, clicks: 0, created_at: null }
+  const url = { longURL, shortenedURL: md5(longURL), folderID: id, clicks: 0 }
   database('urls').insert(url)
   .then(function() {
     database('urls').where('folderID', id).select()
@@ -76,11 +76,17 @@ app.get('/api/folders', (request, response) => {
           });
 })
 
-app.get('/api/urls/:id', (res, req)=> {
-  const { id } = req.params
-  database('urls').where('id', req.params.id).select()
-    .then(res.increment('clicks', 1).where('id', req.params.id))
-})
+//WIP Couter patch request
+// app.patch('/api/urls/:id', (request, response)=> {
+//   const { id } = request.params
+//   let clicks
+//   database('urls').where('id', id).select()
+//     .then((url) => {
+//       clicks = url.clicks + 1
+//       database('urls').where('id', id).select().update({ click })
+//     })
+//     .then(response.increment('clicks', 1).where('id', id))
+// })
 
 if(!module.parent){
   app.listen(app.get('port'), ()=> {
