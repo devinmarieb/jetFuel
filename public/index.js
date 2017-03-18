@@ -2,6 +2,7 @@ const submitBtn = document.querySelector('.submit-btn')
 const folderList = document.querySelector('.folders')
 const URLList = document.querySelector('.url-container')
 let folderName
+let finalURL
 
 submitBtn.addEventListener('click', (e)=> {
   e.preventDefault()
@@ -31,11 +32,18 @@ folderList.addEventListener('click', (e)=> {
     <aside class="new-url-container">
       <input placeholder="Enter a URL" class="url-input" />
       <input type="submit" value="Shorten" class="submit-btn-url"/>
+      <aside class="sort-container">
+        <p class="sort-by">Sort By:</p>
+        <button class="date-btn">Most Recent</button>
+        <button class="popularity-btn">Popularity</button>
+      </aside>
     </aside>
     <h1 class="folder-title">${e.target.innerHTML}</h1>
   </section>`
 
   postNewURL()
+  sortByDate()
+  sortByPopularity()
 })
 
 // URLList.addEventListener('click', (e)=> {
@@ -49,8 +57,9 @@ folderList.addEventListener('click', (e)=> {
 //       },
 //     })
 //     .then(res => res.json())
-//     .then(res => getFolderURLS(res))
 // })
+
+
 
 function getFolders(){
   const server = ('/api/folders')
@@ -67,7 +76,7 @@ function getFolders(){
 }
 
 function getFolderURLS(id){
-  const server = (`/api/folders/${id}/urls`)
+  const server = (`http://localhost:3000/api/folders/${id}/urls`)
   fetch(server, {
     method:'GET',
     headers: {
@@ -79,19 +88,22 @@ function getFolderURLS(id){
   .then(res => document.querySelector('.url-container').innerHTML = shortenURL(res))
 }
 
-function shortenURL(bookmark){
+function shortenURL(bookmark) {
   return bookmark.reduce((acc, link) =>
   `${acc} <li class="url-list">
     <a class="link" href="${link.longURL}" target="_blank" data-id=${link.shortenedURL} id=${link.id} data-created=${Date.now()}>
-      ${link.shortenedURL.slice(0,3)}.${link.shortenedURL.slice(4,6)}
+      ${link.shortenedURL.slice(0,6)}
     </a>
   </li>`, '')
 }
 
 function postNewURL() {
     document.querySelector('.submit-btn-url').addEventListener('click', (e)=> {
+      debugger
     e.preventDefault()
-    const urlInput = document.querySelector('.url-input')
+    const urlInput = document.querySelector('.url-input').value
+    const emptyInput = document.querySelector('.url-input')
+    checkURL(urlInput)
     const server = (`/api/folders/${folderName}/urls`)
     fetch(server, {
       method:'POST',
@@ -100,16 +112,36 @@ function postNewURL() {
         'Accept': 'application/json',
       },
       body: JSON.stringify({
-        longURL: urlInput.value,
-        shortenedURL: urlInput.value,
+        longURL: finalURL,
+        shortenedURL: finalURL,
       })
     })
     .then(res => res.json())
     .then(res => getFolderURLS(folderName))
-    urlInput.value = ''
+    emptyInput.value = ''
+  })
+}
+
+function checkURL(urlInput) {
+  if(urlInput.slice(0,7) === "http://" || urlInput.slice(0,8) === "https://") {
+    finalURL = urlInput
+  } else {
+    finalURL = 'http://'.concat(urlInput)
+  }
+}
+
+function sortByDate() {
+  document.querySelector('.date-btn').addEventListener('click', (e)=> {
+    console.log('date button');
+  })
+}
+
+function sortByPopularity() {
+  document.querySelector('.popularity-btn').addEventListener('click', (e)=> {
+    console.log('popularity button');
   })
 }
 
 window.onload = getFolders()
 
-module.exports = shortenURL
+module.exports = {shortenURL, reduceURL}

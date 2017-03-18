@@ -76,6 +76,27 @@ app.get('/api/folders', (request, response) => {
           });
 })
 
+app.get('/:shortURL', (req, res) => {
+  const { shortURL } = req.params
+  let longURL
+  let updatedClicks
+  database('urls').where('shortenedURL', shortURL).select()
+  .then((urls)=> {
+    longURL = (urls[0].url)
+    updatedClicks = (urls[0].clicks) + 1
+  })
+  .then(()=> {
+    database('urls').where('shortenedURL', shortURL).update({ clicks: updatedClicks })
+      .then(()=> {
+        response.status(302).redirect(`${longURL}`)
+      })
+  })
+  .catch(function(error) {
+    console.error('somethings wrong with the db')
+  })
+})
+
+
 //WIP Couter patch request
 // app.patch('/api/urls/:id', (request, response)=> {
 //   const { id } = request.params
