@@ -34,9 +34,9 @@ app.post('/api/folders', (req, res)=> {
             .then(function(folders) {
               res.status(200).json(folders);
             })
-            .catch(function(error) {
-              console.error('somethings wrong with db')
-            });
+    .catch(function(error) {
+      console.error('somethings wrong with db')
+    })
   })
 })
 
@@ -47,22 +47,22 @@ app.get('/api/folders/:id/urls', (request, response) => {
   })
   .catch(function(error) {
     console.error('somethings wrong with db')
-  });
+  })
 })
 
 app.post('/api/folders/:id/urls', (req, res)=> {
-  const { longURL } = req.body
+  let { longURL } = req.body
   const { id } = req.params
-  const url = { longURL, shortenedURL: md5(longURL), folderID: id, clicks: 0 }
+  const url = { longURL: longURL, shortenedURL: md5(longURL).slice(0,6), folderID: id, clicks: 0 }
   database('urls').insert(url)
   .then(function() {
     database('urls').where('folderID', id).select()
             .then(function(urls) {
               res.status(200).json(urls);
             })
-            .catch(function(error) {
-              console.error('somethings wrong with db')
-            });
+    .catch(function(error) {
+      console.error('somethings wrong with db')
+    })
   })
 })
 
@@ -71,40 +71,29 @@ app.get('/api/folders', (request, response) => {
           .then(function(folders) {
             response.status(200).json(folders);
           })
-          .catch(function(error) {
-            console.error('somethings wrong with db')
-          });
+  .catch(function(error) {
+    console.error('somethings wrong with db')
+  })
 })
 
 app.get('/:shortURL', (req, res) => {
   const { shortURL } = req.params
-  let longURL
-  let updatedClicks
-  database('urls').where('shortenedURL', shortURL).select()
-  .then((urls)=> {
-    longURL = (urls[0].url)
-    updatedClicks = (urls[0].clicks) + 1
-  })
-  .then(()=> {
-    database('urls').where('shortenedURL', shortURL).update({ clicks: updatedClicks })
-      .then(()=> {
-        response.status(302).redirect(`${longURL}`)
+    database('urls').where('shortenedURL', shortURL).select()
+      .then(function(urls) {
+        res.status(302).redirect(urls[0].longURL)
       })
-  })
   .catch(function(error) {
-    console.error('somethings wrong with the db')
+    console.error(error)
   })
 })
 
-
-//WIP Couter patch request
-// app.patch('/api/urls/:id', (request, response)=> {
-//   const { id } = request.params
-//   let clicks
-//   database('urls').where('id', id).select()
+// app.patch('/:shortURL', (request, response)=> {
+//   const { shortURL } = request.params
+//   let updatedClicks
+//   database('urls').where('shortenedURL', shortURL).select()
 //     .then((url) => {
-//       clicks = url.clicks + 1
-//       database('urls').where('id', id).select().update({ click })
+//       updatedClicks = (urls[0].clicks) + 1
+//       database('urls').where('shortenedURL', shortURL).select().update({ clicks: updatedClicks })
 //     })
 //     .then(response.increment('clicks', 1).where('id', id))
 // })

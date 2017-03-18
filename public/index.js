@@ -47,8 +47,8 @@ folderList.addEventListener('click', (e)=> {
 })
 
 // URLList.addEventListener('click', (e)=> {
-//     const id = e.target.id
-//     const server = (`/api/urls/${id}`)
+//     const shortURL = e.target.shortURL
+//     const server = (`/${shortURL}`)
 //     fetch(server, {
 //       method:'PATCH',
 //       headers: {
@@ -94,6 +94,8 @@ function shortenURL(bookmark) {
     <a class="link" href="${link.longURL}" target="_blank" data-id=${link.shortenedURL} id=${link.id} data-created=${Date.now()}>
       ${link.shortenedURL.slice(0,6)}
     </a>
+    <p class="url-clicks">visit count: ${link.clicks}</p>
+    <p class="url-date">date created: </p>
   </li>`, '')
 }
 
@@ -112,8 +114,7 @@ function postNewURL() {
         'Accept': 'application/json',
       },
       body: JSON.stringify({
-        longURL: finalURL,
-        shortenedURL: finalURL,
+        longURL: finalURL
       })
     })
     .then(res => res.json())

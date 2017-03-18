@@ -17,27 +17,3 @@ function reduceURL(bookmark) {
 }
 
 module.exports = {shortenURL, reduceURL}
-
-
-
-
-app.get('/:shortUrl', (request, response) => {
-  const { shortUrl } = request.params;
-  let longUrl;
-  let newCount;
-
-  database('urls').where('shortenedUrl', shortUrl).select()
-  .then((urlArray) => {
-    longUrl = (urlArray[0].url)
-    newCount = (urlArray[0].numOfClicks) + 1
-  })
-  .then(() => {
-    database('urls').where('shortenedUrl', shortUrl).update({ numOfClicks: newCount })
-    .then(() => {
-      response.status(302).redirect(`${longUrl}`);
-    })
-  })
-  .catch((error) => {
-    console.error('error getting short URL:', error)
-  })
-})
