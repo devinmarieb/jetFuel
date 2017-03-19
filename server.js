@@ -76,17 +76,16 @@ app.get('/api/folders', (request, response) => {
           });
 })
 
-//WIP Couter patch request
-// app.patch('/api/urls/:id', (request, response)=> {
-//   const { id } = request.params
-//   let clicks
-//   database('urls').where('id', id).select()
-//     .then((url) => {
-//       clicks = url.clicks + 1
-//       database('urls').where('id', id).select().update({ click })
-//     })
-//     .then(response.increment('clicks', 1).where('id', id))
-// })
+app.get('/:shortURL', (req, res) => {
+  const { shortURL } = req.params
+    database('urls').where('shortenedURL', shortURL).select()
+      .then(function(urls) {
+        res.status(302).redirect(urls[0].longURL)
+      })
+  .catch(function(error) {
+    console.error(error)
+  })
+})
 
 if(!module.parent){
   app.listen(app.get('port'), ()=> {
