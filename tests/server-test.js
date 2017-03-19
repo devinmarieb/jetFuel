@@ -5,7 +5,7 @@ const assert = chai.assert
 const chaiHttp = require('chai-http')
 const app = require('../server.js')
 chai.use(chaiHttp)
-const shortenURL = require('../public/helpers.js')
+const {shortenURL, reduceURL} = require('../public/helpers.js')
 
 describe('Server', () => {
   it('should exist', () => {
@@ -241,5 +241,11 @@ describe('/:shortURL', () => {
 describe('shortenURL', ()=> {
   it('should be a function', ()=> {
     assert.isFunction(shortenURL)
+  })
+})
+
+describe('reduceURL', ()=> {
+  it('should be a function', ()=> {
+    assert.isFunction(reduceURL)
   })
 })

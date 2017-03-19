@@ -26,7 +26,7 @@
   font-size: 24px;
 }
 
-.submit-btn, .submit-btn-url, .popularity-btn, .date-btn {
+.submit-btn, .submit-btn-url {
   margin-left: 20px;
   padding: 10px;
   background-color: magenta;
@@ -35,6 +35,17 @@
   outline: none;
   border-radius: 40px;
   font-size: 24px;
+}
+
+.popularity-btn, .date-btn {
+  margin-left: 20px;
+  padding: 10px;
+  background-color: magenta;
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  font-size: 18px;
 }
 
 .submit-btn:hover, .submit-btn-url:hover, .popularity-btn:hover, .date-btn:hover {
@@ -77,6 +88,11 @@ li {
   float: right;
 }
 
+.sort-container {
+  display: block;
+  margin-top: 50px;
+}
+
 .sort-by {
   display: inline-block;
   font-size: 24px;
@@ -88,4 +104,9 @@ li {
   text-decoration: underline;
   font-size: 24px;
   font-family: 'Open Sans', sans-serif;
+}
+
+.url-clicks, .url-date {
+  margin-left: 10px;
+  display: inline-block;
 }
