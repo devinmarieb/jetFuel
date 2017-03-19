@@ -43,7 +43,7 @@ folderList.addEventListener('click', (e)=> {
 
   postNewURL()
   sortByDate()
-  sortByPopularity()
+  sortByPopularity(folderName)
 })
 
 URLList.addEventListener('click', (e)=> {
@@ -95,14 +95,13 @@ function shortenURL(bookmark) {
     <a class="link" href="${link.longURL}" target="_blank" data-id=${link.shortenedURL} id=${link.id} data-created=${Date.now()}>
       ${link.shortenedURL.slice(0,6)}
     </a>
-    <p class="url-clicks">visit count: ${link.clicks}</p>
+    <p class="url-clicks">visit count: <span class="link-clicks">${link.clicks}</span></p>
     <p class="url-date">date created: </p>
   </li>`, '')
 }
 
 function postNewURL() {
     document.querySelector('.submit-btn-url').addEventListener('click', (e)=> {
-      debugger
     e.preventDefault()
     const urlInput = document.querySelector('.url-input').value
     const emptyInput = document.querySelector('.url-input')
@@ -138,9 +137,18 @@ function sortByDate() {
   })
 }
 
-function sortByPopularity() {
+function sortByPopularity(id) {
   document.querySelector('.popularity-btn').addEventListener('click', (e)=> {
-    console.log('popularity button');
+  //   const server = (`http://localhost:3000/api/folders/${id}/sort`)
+  //   fetch(server, {
+  //     method:'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Accept': 'application/json',
+  //     },
+  //   })
+  //   .then(res => res.json())
+  //   .then(res => document.querySelector('.url-container').innerHTML = shortenURL(res))
   })
 }
 
