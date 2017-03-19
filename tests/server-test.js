@@ -110,6 +110,86 @@ describe('GET /api/folders/:id/urls', () => {
   })
 })
 
+describe('GET /api/folders/:id/urls/mostRecent', () => {
+  context('if a folder is found', () => {
+    it('should return a specific folder', () => {
+      const folder = {
+        id: 2,
+        name: 'desserts'
+      }
+      const urls = [
+        {
+          id:1,
+          longURL: 'http://www.boardgamegeek.com',
+          shortenedURL: 'bgg.co',
+          clicks: 0,
+          folderID: folder.id,
+          created_at: '2017-03-19T22:31:13.606Z'
+        },
+        {
+          id:2,
+          longURL: 'http://www.medium.com',
+          shortenedURL: 'med.iu',
+          clicks: 0,
+          folderID: folder.id,
+          created_at: '2017-03-19T22:30:18.323Z'
+        }
+      ]
+      chai.request(app)
+      .get(`/api/folders/${folder.id}/urls/mostRecent`)
+      .end((err, res) => {
+        if(err) {done(err)}
+        expect(res).to.have.status(200)
+        expect(res).to.be.json
+        expect(res.body).to.be.a('object')
+        expect(res.body[0].created_at).to.be('2017-03-19T22:31:13.606Z')
+        done()
+      })
+    })
+
+  })
+})
+
+describe('GET /api/folders/:id/urls/visitCount', () => {
+  context('if a folder is found', () => {
+    it('should return a specific folder', () => {
+      const folder = {
+        id: 2,
+        name: 'desserts'
+      }
+      const urls = [
+        {
+          id:1,
+          longURL: 'http://www.boardgamegeek.com',
+          shortenedURL: 'bgg.co',
+          clicks: 2,
+          folderID: folder.id,
+          created_at: '2017-03-19T22:31:13.606Z'
+        },
+        {
+          id:2,
+          longURL: 'http://www.medium.com',
+          shortenedURL: 'med.iu',
+          clicks: 5,
+          folderID: folder.id,
+          created_at: '2017-03-19T22:30:18.323Z'
+        }
+      ]
+      chai.request(app)
+      .get(`/api/folders/${folder.id}/urls/mostRecent`)
+      .end((err, res) => {
+        if(err) {done(err)}
+        expect(res).to.have.status(200)
+        expect(res).to.be.json
+        expect(res.body).to.be.a('object')
+        expect(res.body[0].clicks).to.be(2)
+        done()
+      })
+    })
+
+  })
+})
+
   describe('POST /api/folders', () => {
 
     context('if folder is valid', () => {
@@ -207,14 +287,12 @@ describe('/:shortURL', () => {
         longURL: 'http://www.boardgamegeek.com',
         shortenedURL: 'bgg.co',
         clicks: 0,
-        folderID: folder.id
       },
       {
         id:2,
         longURL: 'http://www.medium.com',
         shortenedURL: 'med.iu',
         clicks: 0,
-        folderID: folder.id
       }
     ]
     app.locals.urls = urls
@@ -233,9 +311,49 @@ describe('/:shortURL', () => {
       expect(res.body.longURL).to.be('http://www.boardgamegeek.com')
       done()
     })
-
-
   })
+})
+
+describe('PUT /:shortURL', () => {
+  beforeEach((done) => {
+    const folder = {
+      id: 2,
+      name: 'desserts'
+    }
+    const urls = [
+      {
+        id:1,
+        longURL: 'http://www.boardgamegeek.com',
+        shortenedURL: 'bgg.co',
+        clicks: 1,
+        folderID: folder.id
+      },
+      {
+        id:2,
+        longURL: 'http://www.medium.com',
+        shortenedURL: 'med.iu',
+        clicks: 0,
+        folderID: folder.id
+      }
+    ]
+    app.locals.folder = folder
+    app.locals.urls = urls
+    done()
+  })
+
+it('should increment the count of a single URL when clicked',() => {
+  chai.request(app)
+  .put(`/${app.locals.urls.shortenedURL}`)
+  .send({ clicks: (app.locals.urls[0].clicks) + 1 })
+  .end((err, res) => {
+    expect(res).to.have.status(200)
+    expect(res.body[0].clicks).to.be(2)
+    expect(res).to.be.json
+    expect(res.body).to.be.a('array')
+    done()
+  })
+})
+
 })
 
 describe('shortenURL', ()=> {

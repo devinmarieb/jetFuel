@@ -126,17 +126,6 @@ app.put('/:shortURL', (req, res)=> {
   })
 })
 
-app.get('/api/folders/:id/sort', (request, response) => {
-  database('urls').where('folderID', request.params.id).select()
-  .then(function(urls) {
-    console.log(urls)
-    // response.status(200).json(urls);
-  })
-  .catch(function(error) {
-    console.error('somethings wrong with db')
->>>>>>> 1279a587c1672182ca80a84ba3f1967bda425b8e
-  })
-})
 
 if(!module.parent){
   app.listen(app.get('port'), ()=> {
