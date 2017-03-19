@@ -1,5 +1,6 @@
 const chai = require('chai')
 const expect = chai.expect
+const should = chai.should
 const assert = chai.assert
 const chaiHttp = require('chai-http')
 const app = require('../server.js')
@@ -198,6 +199,44 @@ describe('POST /api/folders/:id/urls', () => {
   })
 })
 
+describe('/:shortURL', () => {
+  beforeEach((done) => {
+    const urls = [
+      {
+        id:1,
+        longURL: 'http://www.boardgamegeek.com',
+        shortenedURL: 'bgg.co',
+        clicks: 0,
+        folderID: folder.id
+      },
+      {
+        id:2,
+        longURL: 'http://www.medium.com',
+        shortenedURL: 'med.iu',
+        clicks: 0,
+        folderID: folder.id
+      }
+    ]
+    app.locals.urls = urls
+    done()
+  })
+
+  it('should redirect to the longURL if the shortURL matches in the database', () => {
+    chai.request(app)
+    .get(`/${app.locals.urls[0].shortenedURL}`)
+    .end((err, res) => {
+      expect(err).to.not.exist
+      expect(res).to.have.status(302)
+      expect(res).to.redirectTo('http://www.boardgamegeek.com')
+      expect(res).to.be.json
+      expect(res.body).to.be.a('array')
+      expect(res.body.longURL).to.be('http://www.boardgamegeek.com')
+      done()
+    })
+
+
+  })
+})
 
 describe('shortenURL', ()=> {
   it('should be a function', ()=> {
