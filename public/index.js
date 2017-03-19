@@ -42,7 +42,7 @@ folderList.addEventListener('click', (e)=> {
   </section>`
 
   postNewURL()
-  sortByDate()
+  sortByDate(folderName)
   sortByPopularity(folderName)
 })
 
@@ -90,13 +90,14 @@ function getFolderURLS(id){
 }
 
 function shortenURL(bookmark) {
+  console.log(bookmark);
   return bookmark.reduce((acc, link) =>
   `${acc} <li class="url-list">
     <a class="link" href="${link.longURL}" target="_blank" data-id=${link.shortenedURL} id=${link.id} data-created=${Date.now()}>
       ${link.shortenedURL.slice(0,6)}
     </a>
     <p class="url-clicks">visit count: <span class="link-clicks">${link.clicks}</span></p>
-    <p class="url-date">date created: </p>
+    <p class="url-date">date created: <span class="link-created">${link.created_at}</span></p>
   </li>`, '')
 }
 
@@ -131,24 +132,33 @@ function checkURL(urlInput) {
   }
 }
 
-function sortByDate() {
+function sortByDate(folderName) {
   document.querySelector('.date-btn').addEventListener('click', (e)=> {
-    console.log('date button');
+    const server = (`http://localhost:3000/api/folders/${folderName}/urls/mostRecent`)
+    fetch(server, {
+      method:'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    })
+    .then(res => res.json())
+    .then(res => document.querySelector('.url-container').innerHTML = shortenURL(res))
   })
 }
 
-function sortByPopularity(id) {
+function sortByPopularity() {
   document.querySelector('.popularity-btn').addEventListener('click', (e)=> {
-  //   const server = (`http://localhost:3000/api/folders/${id}/sort`)
-  //   fetch(server, {
-  //     method:'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Accept': 'application/json',
-  //     },
-  //   })
-  //   .then(res => res.json())
-  //   .then(res => document.querySelector('.url-container').innerHTML = shortenURL(res))
+    const server = (`http://localhost:3000/api/folders/${folderName}/urls/visitCount`)
+    fetch(server, {
+      method:'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    })
+    .then(res => res.json())
+    .then(res => document.querySelector('.url-container').innerHTML = shortenURL(res))
   })
 }
 

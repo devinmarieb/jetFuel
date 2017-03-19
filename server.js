@@ -43,17 +43,40 @@ app.post('/api/folders', (req, res)=> {
 app.get('/api/folders/:id/urls', (request, response) => {
   database('urls').where('folderID', request.params.id).select()
   .then(function(urls) {
+    console.log(urls)
     response.status(200).json(urls);
   })
   .catch(function(error) {
-    console.error('somethings wrong with db')
+    console.error(error)
+  })
+})
+
+app.get('/api/folders/:id/urls/mostRecent', (request, response) => {
+  database('urls').where('folderID', request.params.id).select().orderBy('created_at', 'desc')
+  .then(function(urls) {
+    console.log(urls)
+    response.status(200).json(urls);
+  })
+  .catch(function(error) {
+    console.error(error)
+  })
+})
+
+app.get('/api/folders/:id/urls/visitCount', (request, response) => {
+  database('urls').where('folderID', request.params.id).select().orderBy('clicks', 'desc')
+  .then(function(urls) {
+    console.log(urls)
+    response.status(200).json(urls);
+  })
+  .catch(function(error) {
+    console.error(error)
   })
 })
 
 app.post('/api/folders/:id/urls', (req, res)=> {
   let { longURL } = req.body
   const { id } = req.params
-  const url = { longURL: longURL, shortenedURL: md5(longURL).slice(0,6), folderID: id, clicks: 0 }
+  const url = { longURL: longURL, shortenedURL: md5(longURL).slice(0,6), folderID: id, clicks: 0, created_at: new Date() }
   database('urls').insert(url)
   .then(function() {
     database('urls').where('folderID', id).select()
