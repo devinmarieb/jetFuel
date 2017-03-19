@@ -46,18 +46,19 @@ folderList.addEventListener('click', (e)=> {
   sortByPopularity()
 })
 
-// URLList.addEventListener('click', (e)=> {
-//     const shortURL = e.target.shortURL
-//     const server = (`/${shortURL}`)
-//     fetch(server, {
-//       method:'PATCH',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Accept': 'application/json',
-//       },
-//     })
-//     .then(res => res.json())
-// })
+URLList.addEventListener('click', (e)=> {
+    const shortURL = e.target.dataset.id
+    const server = (`/${shortURL}`)
+    fetch(server, {
+      method:'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    })
+    .then(res => res.json())
+    .then(res => document.querySelector('.url-container').innerHTML = getFolderURLS(folderName))
+})
 
 
 

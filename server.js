@@ -83,20 +83,25 @@ app.get('/:shortURL', (req, res) => {
         res.status(302).redirect(urls[0].longURL)
       })
   .catch(function(error) {
-    console.error(error)
+    console.error('theres something wrong with the db')
   })
 })
 
-// app.patch('/:shortURL', (request, response)=> {
-//   const { shortURL } = request.params
-//   let updatedClicks
-//   database('urls').where('shortenedURL', shortURL).select()
-//     .then((url) => {
-//       updatedClicks = (urls[0].clicks) + 1
-//       database('urls').where('shortenedURL', shortURL).select().update({ clicks: updatedClicks })
-//     })
-//     .then(response.increment('clicks', 1).where('id', id))
-// })
+app.put('/:shortURL', (req, res)=> {
+  const { shortURL } = req.params
+  let updatedClicks
+  database('urls').where('shortenedURL', shortURL).select()
+    .then((urls) => {
+      updatedClicks = (urls[0].clicks) + 1
+      database('urls').where('shortenedURL', shortURL).select().update({ clicks: updatedClicks })
+        .then(function(urls){
+          res.status(200).json(urls);
+        })
+    })
+  .catch(function(error) {
+    console.error('theres something wrong with the db')
+  })
+})
 
 if(!module.parent){
   app.listen(app.get('port'), ()=> {
