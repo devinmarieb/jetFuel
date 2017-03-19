@@ -34,35 +34,58 @@ app.post('/api/folders', (req, res)=> {
             .then(function(folders) {
               res.status(200).json(folders);
             })
-            .catch(function(error) {
-              console.error('somethings wrong with db')
-            });
+    .catch(function(error) {
+      console.error('somethings wrong with db')
+    })
   })
 })
 
 app.get('/api/folders/:id/urls', (request, response) => {
   database('urls').where('folderID', request.params.id).select()
   .then(function(urls) {
+    console.log(urls)
     response.status(200).json(urls);
   })
   .catch(function(error) {
-    console.error('somethings wrong with db')
-  });
+    console.error(error)
+  })
+})
+
+app.get('/api/folders/:id/urls/mostRecent', (request, response) => {
+  database('urls').where('folderID', request.params.id).select().orderBy('created_at', 'desc')
+  .then(function(urls) {
+    console.log(urls)
+    response.status(200).json(urls);
+  })
+  .catch(function(error) {
+    console.error(error)
+  })
+})
+
+app.get('/api/folders/:id/urls/visitCount', (request, response) => {
+  database('urls').where('folderID', request.params.id).select().orderBy('clicks', 'desc')
+  .then(function(urls) {
+    console.log(urls)
+    response.status(200).json(urls);
+  })
+  .catch(function(error) {
+    console.error(error)
+  })
 })
 
 app.post('/api/folders/:id/urls', (req, res)=> {
-  const { longURL } = req.body
+  let { longURL } = req.body
   const { id } = req.params
-  const url = { longURL, shortenedURL: md5(longURL), folderID: id, clicks: 0 }
+  const url = { longURL: longURL, shortenedURL: md5(longURL).slice(0,6), folderID: id, clicks: 0, created_at: new Date() }
   database('urls').insert(url)
   .then(function() {
     database('urls').where('folderID', id).select()
             .then(function(urls) {
               res.status(200).json(urls);
             })
-            .catch(function(error) {
-              console.error('somethings wrong with db')
-            });
+    .catch(function(error) {
+      console.error('somethings wrong with db')
+    })
   })
 })
 
@@ -71,22 +94,48 @@ app.get('/api/folders', (request, response) => {
           .then(function(folders) {
             response.status(200).json(folders);
           })
-          .catch(function(error) {
-            console.error('somethings wrong with db')
-          });
+  .catch(function(error) {
+    console.error('somethings wrong with db')
+  })
 })
 
-//WIP Couter patch request
-// app.patch('/api/urls/:id', (request, response)=> {
-//   const { id } = request.params
-//   let clicks
-//   database('urls').where('id', id).select()
-//     .then((url) => {
-//       clicks = url.clicks + 1
-//       database('urls').where('id', id).select().update({ click })
-//     })
-//     .then(response.increment('clicks', 1).where('id', id))
-// })
+app.get('/:shortURL', (req, res) => {
+  const { shortURL } = req.params
+    database('urls').where('shortenedURL', shortURL).select()
+      .then(function(urls) {
+        res.status(302).redirect(urls[0].longURL)
+      })
+  .catch(function(error) {
+    console.error('theres something wrong with the db')
+  })
+})
+
+app.put('/:shortURL', (req, res)=> {
+  const { shortURL } = req.params
+  let updatedClicks
+  database('urls').where('shortenedURL', shortURL).select()
+    .then((urls) => {
+      updatedClicks = (urls[0].clicks) + 1
+      database('urls').where('shortenedURL', shortURL).select().update({ clicks: updatedClicks })
+        .then(function(urls){
+          res.status(200).json(urls);
+        })
+    })
+  .catch(function(error) {
+    console.error('theres something wrong with the db')
+  })
+})
+
+app.get('/api/folders/:id/sort', (request, response) => {
+  database('urls').where('folderID', request.params.id).select()
+  .then(function(urls) {
+    console.log(urls)
+    // response.status(200).json(urls);
+  })
+  .catch(function(error) {
+    console.error('somethings wrong with db')
+  })
+})
 
 if(!module.parent){
   app.listen(app.get('port'), ()=> {
