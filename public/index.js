@@ -90,14 +90,13 @@ function getFolderURLS(id){
 }
 
 function shortenURL(bookmark) {
-  console.log(bookmark);
   return bookmark.reduce((acc, link) =>
   `${acc} <li class="url-list">
     <a class="link" href="${link.longURL}" target="_blank" data-id=${link.shortenedURL} id=${link.id} data-created=${Date.now()}>
       ${link.shortenedURL.slice(0,6)}
     </a>
     <p class="url-clicks">visit count: <span class="link-clicks">${link.clicks}</span></p>
-    <p class="url-date">date created: <span class="link-created">${link.created_at}</span></p>
+    <p class="url-date">date created: <span class="link-created">${new Date(link.created_at)}</span></p>
   </li>`, '')
 }
 
